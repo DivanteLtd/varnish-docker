@@ -1,0 +1,12 @@
+services:
+  - docker
+
+script: 
+  - docker build -t divante/varnish:$COMMIT -t divante/varnish:latest .
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    docker push divante/varnish:$COMMIT;
+    docker push divante/varnish:latest;
+    fi
